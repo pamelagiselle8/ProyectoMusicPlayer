@@ -34,12 +34,26 @@ class SongInfoFile : public TDAArchivo {
             return true;
         }
         virtual bool Leer() {
-            return true;
+            // if (file.is_open()) {
+            //     string buffer = "";
+            //     // Leer en bloques
+            //     getline(file, buffer);
+            //     for (int i = 0; i < buffer.length(); i += 20)
+            //         agregarCancion(new SongInfo(
+            //             buffer.substr(i, 20),       // Nombre
+            //             buffer.substr(i+20, 20),    // Artista
+            //             buffer.substr(i+40, 20),    // Album
+            //             buffer.substr(i+60, 20),    // Genero
+            //             buffer.substr(i+80, 60)));  // Ruta
+            //     // trim_right(buffer);
+            // }
+            return file.is_open();
         }
 
-        string truncarDato(string dato) {
+        // Metodo para rellenar el espacio no utilizado
+        string truncarDato(string dato, int capacidad) {
             string datoTruncado = dato.substr(0, 20);
-            datoTruncado.append(20 - datoTruncado.size(), ' ');
+            datoTruncado.append(capacidad - datoTruncado.size(), ' ');
             return datoTruncado;
         }
 
@@ -57,22 +71,13 @@ class SongInfoFile : public TDAArchivo {
                             album = cancion->getDisco(),
                             genero = cancion->getGenero(),
                             ruta = cancion->getRuta();
+
                         // Rellenar el espacio no utilizado
-                        string datoTruncado = nombre.substr(0, 20);
-                        datoTruncado.append(20 - datoTruncado.size(), ' ');
-                        buffer.append(datoTruncado);
-                        datoTruncado = artista.substr(0, 20) ;
-                        datoTruncado.append(20 - datoTruncado.size(), ' ');
-                        buffer.append(datoTruncado);
-                        datoTruncado = album.substr(0, 20) ;
-                        datoTruncado.append(20 - datoTruncado.size(), ' ');
-                        buffer.append(datoTruncado);
-                        datoTruncado =  genero.substr(0, 20) ;
-                        datoTruncado.append(20 - datoTruncado.size(), ' ');
-                        buffer.append(datoTruncado);
-                        datoTruncado = ruta.substr(0, 60);
-                        datoTruncado.append(20 - datoTruncado.size(), ' ');
-                        buffer.append(datoTruncado);
+                        buffer.append(truncarDato(nombre, 20));
+                        buffer.append(truncarDato(artista, 20));
+                        buffer.append(truncarDato(album, 20));
+                        buffer.append(truncarDato(genero, 20));
+                        buffer.append(truncarDato(ruta, 60));
                     }
                 }
                 // Escribir en el archivo

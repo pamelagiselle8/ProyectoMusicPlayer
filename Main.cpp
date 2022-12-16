@@ -271,6 +271,9 @@ int main() {
     generoFile->Abrir();
     generoFile->Leer();
     generoFile->Cerrar();
+    songInfoFile->Abrir();
+    songInfoFile->Leer();
+    songInfoFile->Cerrar();
     while (opMenu != "5") {
         if (opMenu == "1") {
             // Generos
