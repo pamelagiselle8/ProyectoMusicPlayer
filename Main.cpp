@@ -15,6 +15,15 @@ vector<Genero> generos;
 vector<SongInfo> canciones;
 vector<Playlist> playlists;
 
+template <typename T> T listar(vector<T> lista) {
+    cout << endl;
+    if(!lista.empty())
+        for (T obj : lista)
+            cout << "- " << obj.toString() << endl;
+    else
+        cout << "Aun no hay elementos registrados.\n";
+}
+
 void menuGeneros() {
     string op = "";
     while (op != "3") {
@@ -35,12 +44,13 @@ void menuGeneros() {
         }
         else if (op == "2") {
             // Listar generos
-            cout << endl;
-            if(!generos.empty())
-                for (Genero genero : generos)
-                    cout << "- " << genero.toString() << endl;
-            else
-                cout << "Aun no hay generos registrados.\n";
+            // cout << endl;
+            // if(!generos.empty())
+            //     for (Genero genero : generos)
+            //         cout << "- " << genero.toString() << endl;
+            // else
+            //     cout << "Aun no hay generos registrados.\n";
+            listar(generos);
             break;
         }
         else if (op == "3") { break; }
