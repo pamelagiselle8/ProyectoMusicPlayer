@@ -170,7 +170,6 @@ void menuPlaylist() {
 
                         // Validar indice de la cancion
                         if (indice >= 0 && indice < songInfoFile->getCanciones().size())
-
                             // Validar que la cancion no se repita
                             if (playlist->agregarCancion(songInfoFile->getCanciones().at(indice)))
                                 cout << "\nCancion agregada exitosamente.\n";
@@ -190,43 +189,78 @@ void menuPlaylist() {
 }
 
 void reproducirCancion() {
-    string op = "";
-    while (op != "2") {
-        cout << "\n1. Pausar"
-            << "\n2. Salir"
-            << "\nIngrese una opcion: ";
-        cin >> op;
-        if (op == "1") {
-            // Pausar cancion
-            
-            break;
+    // Validar que hayan canciones registradas
+    if (!songInfoFile->getCanciones().empty()) {
+        cout << "\nCanciones registradas:\n";
+        listar(songInfoFile->getCanciones());
+        int indice = 0;
+        while (true) {
+            cout << "\nIngrese el indice de la cancion: ";
+            cin >> indice;
+            indice--;
+            // Validar indice de la cancion
+            if (indice >= 0 && indice < songInfoFile->getCanciones().size())
+                break;
+            else { cout << "\nIndice invalido.\n"; }
         }
-        else if (op == "2") { break; }
-        else { cout << "\nIngrese una opcion valida\n"; }
+
+        string op = "";
+        while (op != "2") {
+            cout << "\n1. Pausar"
+                << "\n2. Salir"
+                << "\nIngrese una opcion: ";
+            cin >> op;
+            if (op == "1") {
+                // Pausar cancion
+                
+                break;
+            }
+            else if (op == "2") { break; }
+            else { cout << "\nIngrese una opcion valida\n"; }
+        }
     }
+    else { cout << "\nAun no hay canciones registradas.\n"; }
+    
 }
 
 void reproducirPlaylist() {
-    string op = "";
-    while (op != "3") {
-        cout << "\n1. Siguiente"
-            << "\n2. Pausar"
-            << "\n3. Salir"
-            << "\nIngrese una opcion: ";
-        cin >> op;
-        if (op == "1") {
-            // Siguiente cancion
-            
-            break;
+    // Validar que hayan playlists registradas
+    if (!playlistFile->getPlaylists().empty()) {
+        cout << "\nPlaylists registradas:\n";
+        listar(playlistFile->getPlaylists());
+        int indice = 0;
+        while (true) {
+            cout << "\nIngrese el indice de la playlist: ";
+            cin >> indice;
+            indice--;
+            // Validar indice de la cancion
+            if (indice >= 0 && indice < playlistFile->getPlaylists().size())
+                break;
+            else { cout << "\nIndice invalido.\n"; }
         }
-        else if (op == "2") {
-            // Pausar cancion
-            
-            break;
+
+        string op = "";
+        while (op != "3") {
+            cout << "\n1. Siguiente"
+                << "\n2. Pausar"
+                << "\n3. Salir"
+                << "\nIngrese una opcion: ";
+            cin >> op;
+            if (op == "1") {
+                // Siguiente cancion
+                
+                break;
+            }
+            else if (op == "2") {
+                // Pausar cancion
+                
+                break;
+            }
+            else if (op == "3") { break; }
+            else { cout << "\nIngrese una opcion valida\n"; }
         }
-        else if (op == "3") { break; }
-        else { cout << "\nIngrese una opcion valida\n"; }
     }
+    else { cout << "\nAun no hay playlists registradas.\n"; }
 }
 
 void menuReproduccion() {
@@ -289,7 +323,7 @@ int main() {
         }
         else if (opMenu == "4") {
             // Reproducir
-            
+            menuReproduccion();
         }
         else if (opMenu == "5") { break; }
         else { cout << "\nIngrese una opcion valida.\n"; }
