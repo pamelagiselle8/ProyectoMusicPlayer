@@ -18,7 +18,12 @@ class SongInfo : public Object {
 		
 		// Metodos de administracion
 		virtual bool equals(Object* obj) { return this == obj; }
-		virtual string toString() { return ""; }
+		virtual string toString() {
+			return nombre
+				+ "\nDisco: " + disco
+				+ "\nArtista: " + artista
+				+ "\nRuta: " + ruta;
+		}
 
 		// Getters y setters
 		string getNombre() { return nombre; }

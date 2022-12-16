@@ -17,6 +17,10 @@ class SongInfoFile {
         void setObjects(vector<Object*> objects) { this->objects = objects; }
         
         // Metodos de administracion
-        void leer() {}
-        void escribir() {}
+        void leer() {
+
+        }
+        void escribir() {
+            
+        }
 };

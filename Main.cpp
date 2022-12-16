@@ -15,11 +15,11 @@ vector<Genero> generos;
 vector<SongInfo> canciones;
 vector<Playlist> playlists;
 
-template <typename T> T listar(vector<T> lista) {
+template <typename T> void listar(vector<T> lista) {
     cout << endl;
     if(!lista.empty())
         for (T obj : lista)
-            cout << "- " << obj.toString() << endl;
+            cout << "\n- " << obj.toString() << endl;
     else
         cout << "Aun no hay elementos registrados.\n";
 }
@@ -43,13 +43,6 @@ void menuGeneros() {
             break;
         }
         else if (op == "2") {
-            // Listar generos
-            // cout << endl;
-            // if(!generos.empty())
-            //     for (Genero genero : generos)
-            //         cout << "- " << genero.toString() << endl;
-            // else
-            //     cout << "Aun no hay generos registrados.\n";
             listar(generos);
             break;
         }
@@ -69,12 +62,22 @@ void menuCanciones() {
         cin >> op;
         if (op == "1") {
             // Crear cancion
-            
+            string nom = "", disco = "", artista = "", ruta = "";
+            cout << "\nIngrese el nombre de la cancion: ";
+            cin >> nom;
+            cout << "Ingrese el disco: ";
+            cin >> disco;
+            cout << "Ingrese el artista: ";
+            cin >> artista;
+            cout << "Ingrese la ruta de la cancion: ";
+            cin >> ruta;
+            canciones.push_back(SongInfo(nom, disco, artista, ruta));
+            cout << "\nCancion agregada exitosamente.\n";
             break;
         }
         else if (op == "2") {
             // Listar canciones
-            
+            listar(canciones);
             break;
         }
         else if (op == "3") { break; }
@@ -191,7 +194,7 @@ int main() {
         }
         else if (opMenu == "2") {
             // Canciones
-            
+            menuCanciones();
         }
         else if (opMenu == "3") {
             // Playlist
@@ -208,20 +211,3 @@ int main() {
     
     return 0;
 }
-
-/*GeneroFile* generoFile = new GeneroFile("./Genero.txt");
-
-    if (generoFile->Abrir())
-        generoFile->Leer();
-        generoFile->Cerrar();
-
-    generoFile->agregarGenero(new Genero("Clasica"));
-    generoFile->agregarGenero(new Genero("Rock"));
-    generoFile->agregarGenero(new Genero("Jazz"));
-    generoFile->agregarGenero(new Genero("Clasica"));
-
-    cout << "\nImprimir generos\n";
-    for (Genero* gen : generoFile->getGeneros())
-        cout << gen->getNombre() << endl;
-
-    delete generoFile;*/
