@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 #include "Object.cpp"
@@ -9,6 +10,10 @@ using namespace std;
 #include "SongInfo.cpp"
 #include "SongInfoFile.cpp"
 #include "TDAArchivo.cpp"
+
+vector<Genero> generos;
+vector<SongInfo> canciones;
+vector<Playlist> playlists;
 
 void menuGeneros() {
     string op = "";
@@ -24,7 +29,7 @@ void menuGeneros() {
             string nom = "";
             cout << "\nIngrese el nombre del genero: ";
             cin >> nom;
-            
+            generos.push_back(Genero(nom));
             break;
         }
         else if (op == "2") {
