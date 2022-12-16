@@ -14,15 +14,14 @@ using namespace std;
 GeneroFile* generoFile = new GeneroFile("./Generos.txt");
 PlaylistFile* playlistFile = new PlaylistFile("./Playlists.txt");
 SongInfoFile* songInfoFile = new SongInfoFile("./SongInfos.txt");
-vector<Genero> generos;
-vector<SongInfo> canciones;
-vector<Playlist> playlists;
 
+// Metodo para listar elementos de vectores
 template <typename T> void listar(vector<T*> lista) {
     cout << endl;
+    int cont = 1;
     if(!lista.empty())
         for (T* obj : lista)
-            cout << "- " << obj->toString() << endl;
+            cout << cont++ << "- " << obj->toString() << endl;
     else
         cout << "Aun no hay elementos registrados.\n";
 }
@@ -41,8 +40,14 @@ void menuGeneros() {
             string nom = "";
             cout << "\nIngrese el nombre del genero: ";
             cin >> nom;
+
+            // Validar que no haya dos generos con el mismo nombre
             if (generoFile->agregarGenero(new Genero(nom)))
-                cout << "\nGenero agregado exitosamente.\n";
+                // Guardar datos en el archivo
+                if (generoFile->Escribir()) {
+                    generoFile->Cerrar();
+                    cout << "\nGenero agregado exitosamente.\n";
+                }
             else
                 cout << "\nEl genero ya existe.\n";
             break;
@@ -76,6 +81,8 @@ void menuCanciones() {
             cin >> artista;
             cout << "Ingrese la ruta de la cancion: ";
             cin >> ruta;
+
+            // Validar que no existan dos canciones con la misma ruta
             if (songInfoFile->agregarCancion(new SongInfo(nom, disco, artista, ruta)))
                 cout << "\nCancion agregada exitosamente.\n";
             else
@@ -106,6 +113,8 @@ void menuPlaylist() {
             string nom = "";
             cout << "\nIngrese el nombre de la playlist: ";
             cin >> nom;
+
+            // Validar que la no exista otra playlist con el mismo nombre
             if (playlistFile->agregarPlaylist(new Playlist(nom)))
                 cout << "\nPlaylist agregada exitosamente.\n";
             else
@@ -114,7 +123,40 @@ void menuPlaylist() {
         }
         else if (op == "2") {
             // Agregar cancion
-            
+
+            // Validar que hayan canciones registradas
+            if (!songInfoFile->getCanciones().empty()) {
+
+                // Validar que hayan playlists registradas
+                if (!playlistFile->getPlaylists().empty()) {
+                    string nom = "";
+                    cout << "\nIngrese el nombre de la playlist: ";
+                    cin >> nom;
+                    Playlist* playlist = playlistFile->buscarPlaylist(nom);
+
+                    // Validar que la playlist existe
+                    if (playlist) {
+                        cout << "\nCanciones disponibles:\n";
+                        listar(songInfoFile->getCanciones());
+                        int indice = 0;
+                        cout << "\nIngrese el indice de la cancion que desea agregar: ";
+                        cin >> indice;
+                        indice--;
+
+                        // Validar indice de la cancion
+                        if (indice >= 0 && indice < songInfoFile->getCanciones().size())
+
+                            // Validar que la cancion no se repita
+                            if (playlist->agregarCancion(songInfoFile->getCanciones().at(indice)))
+                                cout << "\nCancion agregada exitosamente.\n";
+                            else { cout << "\nLa cancion ya existe en la playlist.\n"; }
+                        else { cout << "\nIndice invalido.\n"; }
+                    }
+                    else { cout << "\nNo existe una playlist con el nombre ingresado.\n"; }
+                }
+                else { cout << "\nAun no hay playlists registradas.\n"; }
+            }
+            else { cout << "\nAun no hay canciones registradas.\n"; }
             break;
         }
         else if (op == "3") { break; }
@@ -200,6 +242,8 @@ string menuPrincipal() {
 
 int main() {
     string opMenu = menuPrincipal();
+    // Leer los datos de los txt
+    generoFile->Leer();
     while (opMenu != "5") {
         if (opMenu == "1") {
             // Generos

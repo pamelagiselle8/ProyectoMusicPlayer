@@ -55,9 +55,9 @@ class GeneroFile : public TDAArchivo {
         // bool modificarGenero(Genero* genero); // Modificar un genero
 
         virtual bool Leer() {
+            this->Abrir();
             if (file.is_open()) {
                 string buffer = "";
-                // Abrir en binario
                 // Leer en bloques
                 getline(file, buffer);
                 for (int i = 0; i < buffer.length(); i += sizeNombre)
@@ -67,6 +67,7 @@ class GeneroFile : public TDAArchivo {
             return file.is_open();
         }
         virtual bool Escribir() {
+            this->Abrir();
             if (file.is_open()) {
                 string buffer = "";
                 // Construir buffer
