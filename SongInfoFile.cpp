@@ -34,19 +34,19 @@ class SongInfoFile : public TDAArchivo {
             return true;
         }
         virtual bool Leer() {
-            // if (file.is_open()) {
-            //     string buffer = "";
-            //     // Leer en bloques
-            //     getline(file, buffer);
-            //     for (int i = 0; i < buffer.length(); i += 20)
-            //         agregarCancion(new SongInfo(
-            //             buffer.substr(i, 20),       // Nombre
-            //             buffer.substr(i+20, 20),    // Artista
-            //             buffer.substr(i+40, 20),    // Album
-            //             buffer.substr(i+60, 20),    // Genero
-            //             buffer.substr(i+80, 60)));  // Ruta
-            //     // trim_right(buffer);
-            // }
+            if (file.is_open()) {
+                string buffer = "";
+                // Leer en bloques
+                getline(file, buffer);
+                for (int i = 0; i < buffer.length(); i += 140)
+                    agregarCancion(new SongInfo(
+                        buffer.substr(i, 20),       // Nombre
+                        buffer.substr(i+20, 20),    // Artista
+                        buffer.substr(i+40, 20),    // Album
+                        buffer.substr(i+60, 20),    // Genero
+                        buffer.substr(i+80, 60)));  // Ruta
+                // trim_right(buffer);
+            }
             return file.is_open();
         }
 
