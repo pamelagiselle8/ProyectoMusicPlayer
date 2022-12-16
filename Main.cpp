@@ -72,21 +72,46 @@ void menuCanciones() {
         cin >> op;
         if (op == "1") {
             // Crear cancion
-            string nom = "", disco = "", artista = "", ruta = "";
-            cout << "\nIngrese el nombre de la cancion: ";
-            cin >> nom;
-            cout << "Ingrese el disco: ";
-            cin >> disco;
-            cout << "Ingrese el artista: ";
-            cin >> artista;
-            cout << "Ingrese la ruta de la cancion: ";
-            cin >> ruta;
+            // Validar que hayan generos registrados
+            if (!generoFile->getGeneros().empty()) {
+                string nom = "", disco = "", artista = "", genero = "", ruta = "";
+                cout << "\nIngrese el nombre de la cancion: ";
+                cin >> nom;
+                cout << "Ingrese el disco: ";
+                cin >> disco;
+                cout << "Ingrese el artista: ";
+                cin >> artista;
 
-            // Validar que no existan dos canciones con la misma ruta
-            if (songInfoFile->agregarCancion(new SongInfo(nom, disco, artista, ruta)))
-                cout << "\nCancion agregada exitosamente.\n";
-            else
-                cout << "\nYa existe una cancion la ruta ingresada.\n";
+                cout << "\nGeneros registrados:\n";
+                listar(generoFile->getGeneros());
+                int indice = 0;
+                while (true) {
+                    cout << "\nIngrese el indice del genero de la cancion: ";
+                    cin >> indice;
+                    indice--;
+                    // Validar indice del genero de la cancion
+                    if (indice >= 0 && indice < generoFile->getGeneros().size()) {
+                        genero = generoFile->getGeneros().at(indice)->getNombre();
+                        break;
+                    }
+                    else { cout << "\nIndice invalido.\n"; }
+                }
+                
+                cout << "Ingrese la ruta de la cancion: ";
+                cin >> ruta;
+
+                // Validar que no existan dos canciones con la misma ruta
+                if (songInfoFile->agregarCancion(new SongInfo(nom, disco, artista, genero, ruta))) {
+                    // Guardar datos en el archivo
+                    songInfoFile->Abrir();
+                    if (songInfoFile->Escribir())
+                        cout << "\nCancion agregada exitosamente.\n";
+                    songInfoFile->Cerrar();
+                }
+                else
+                    cout << "\nYa existe una cancion la ruta ingresada.\n";
+                }
+            else { cout << "\nAun no hay generos registrados.\n"; }
             break;
         }
         else if (op == "2") {
@@ -243,7 +268,9 @@ string menuPrincipal() {
 int main() {
     string opMenu = menuPrincipal();
     // Leer los datos de los txt
+    generoFile->Abrir();
     generoFile->Leer();
+    generoFile->Cerrar();
     while (opMenu != "5") {
         if (opMenu == "1") {
             // Generos

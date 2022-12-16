@@ -55,7 +55,6 @@ class GeneroFile : public TDAArchivo {
         // bool modificarGenero(Genero* genero); // Modificar un genero
 
         virtual bool Leer() {
-            this->Abrir();
             if (file.is_open()) {
                 string buffer = "";
                 // Leer en bloques
@@ -67,7 +66,6 @@ class GeneroFile : public TDAArchivo {
             return file.is_open();
         }
         virtual bool Escribir() {
-            this->Abrir();
             if (file.is_open()) {
                 string buffer = "";
                 // Construir buffer

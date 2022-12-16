@@ -36,7 +36,48 @@ class SongInfoFile : public TDAArchivo {
         virtual bool Leer() {
             return true;
         }
+
+        string truncarDato(string dato) {
+            string datoTruncado = dato.substr(0, 20);
+            datoTruncado.append(20 - datoTruncado.size(), ' ');
+            return datoTruncado;
+        }
+
         virtual bool Escribir() {
-            return true;
+            if (file.is_open()) {
+                string buffer = "";
+                // Construir buffer
+                for (int i = 0; i < canciones.size(); i++) {
+
+                    // Recuperar los campos del registro
+                    SongInfo* cancion = canciones[i];
+                    if (cancion) {
+                        string nombre = cancion->getNombre(),
+                            artista = cancion->getArtista(),
+                            album = cancion->getDisco(),
+                            genero = cancion->getGenero(),
+                            ruta = cancion->getRuta();
+                        // Rellenar el espacio no utilizado
+                        string datoTruncado = nombre.substr(0, 20);
+                        datoTruncado.append(20 - datoTruncado.size(), ' ');
+                        buffer.append(datoTruncado);
+                        datoTruncado = artista.substr(0, 20) ;
+                        datoTruncado.append(20 - datoTruncado.size(), ' ');
+                        buffer.append(datoTruncado);
+                        datoTruncado = album.substr(0, 20) ;
+                        datoTruncado.append(20 - datoTruncado.size(), ' ');
+                        buffer.append(datoTruncado);
+                        datoTruncado =  genero.substr(0, 20) ;
+                        datoTruncado.append(20 - datoTruncado.size(), ' ');
+                        buffer.append(datoTruncado);
+                        datoTruncado = ruta.substr(0, 60);
+                        datoTruncado.append(20 - datoTruncado.size(), ' ');
+                        buffer.append(datoTruncado);
+                    }
+                }
+                // Escribir en el archivo
+                file.write(buffer.data(), buffer.size());
+            }
+            return file.is_open();
         }
 };

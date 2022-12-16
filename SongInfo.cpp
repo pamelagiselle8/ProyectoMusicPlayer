@@ -6,15 +6,12 @@ using namespace std;
 class SongInfo : public Object {
 	protected:
 		// Atributos
-		string nombre;
-		string disco;
-		string artista;
-		string ruta;
+		string nombre, disco, artista, genero, ruta;
     public:
 		// Constructores
 		SongInfo() {}
-		SongInfo(string nombre, string disco, string artista, string ruta)
-                : nombre(nombre), disco(disco), artista(artista), ruta(ruta) {}
+		SongInfo(string nombre, string disco, string artista, string genero, string ruta)
+                : nombre(nombre), disco(disco), artista(artista), genero(genero), ruta(ruta) {}
 		
 		// Metodos de administracion
 		virtual bool equals(Object* obj) {
@@ -28,6 +25,7 @@ class SongInfo : public Object {
 			return nombre
 				+ "\nDisco: " + disco
 				+ "\nArtista: " + artista
+				+ "\nGenero: " + genero
 				+ "\nRuta: " + ruta + "\n";
 		}
 
@@ -35,10 +33,12 @@ class SongInfo : public Object {
 		string getNombre() { return nombre; }
 		string getDisco() { return disco; }
 		string getArtista() { return artista; }
+		string getGenero() { return genero; }
 		string getRuta() { return ruta; }
 		void setNombre(string nombre) { this->nombre = nombre; }
 		void setDisco(string disco) { this->disco = disco; }
 		void setArtista(string artista) { this->artista = artista; }
+		void setGenero(string genero) { this->genero = genero; }
 		void setRuta(string ruta) { this->ruta = ruta; }
 	
 };
