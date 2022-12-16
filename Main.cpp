@@ -30,11 +30,17 @@ void menuGeneros() {
             cout << "\nIngrese el nombre del genero: ";
             cin >> nom;
             generos.push_back(Genero(nom));
+            cout << "\nGenero agregado exitosamente.\n";
             break;
         }
         else if (op == "2") {
             // Listar generos
-            
+            cout << endl;
+            if(!generos.empty())
+                for (Genero genero : generos)
+                    cout << "- " << genero.toString() << endl;
+            else
+                cout << "Aun no hay generos registrados.\n";
             break;
         }
         else if (op == "3") { break; }
