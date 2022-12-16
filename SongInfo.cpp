@@ -17,12 +17,18 @@ class SongInfo : public Object {
                 : nombre(nombre), disco(disco), artista(artista), ruta(ruta) {}
 		
 		// Metodos de administracion
-		virtual bool equals(Object* obj) { return this == obj; }
+		virtual bool equals(Object* obj) {
+			if (dynamic_cast<SongInfo*>(obj)) {
+                if (!strcmp(this->ruta.data(), ((SongInfo*)obj)->getRuta().data()))
+                    return true;
+            }
+            return false;
+		}
 		virtual string toString() {
 			return nombre
 				+ "\nDisco: " + disco
 				+ "\nArtista: " + artista
-				+ "\nRuta: " + ruta;
+				+ "\nRuta: " + ruta + "\n";
 		}
 
 		// Getters y setters

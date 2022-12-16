@@ -3,20 +3,43 @@
 #include "SongInfo.cpp"
 
 #pragma once
-class Playlist {
+class Playlist : public Object {
 	protected:
         // Atributos
 		string nombre;
-        vector<SongInfo> canciones;
+        vector<SongInfo*> canciones;
     public:
-        // Constructores
+        // Constructores y destructor
 		Playlist() {}
+        Playlist(string nombre) : nombre(nombre) {}
+        ~Playlist() {
+            for (int i = 0; i < canciones.size(); i++) {
+                delete canciones[i];
+            }
+            canciones.clear();
+        }
 
         // Getters y setters
 		string getNombre() { return nombre; }
 		void setNombre(string nombre) { this->nombre = nombre; }
-		vector<SongInfo> getCanciones() { return canciones; }
-		void setCanciones(vector<SongInfo> canciones) {
+		vector<SongInfo*> getCanciones() { return canciones; }
+		void setCanciones(vector<SongInfo*> canciones) {
             this->canciones = canciones;
+        }
+
+        // Metodos de administracion
+        bool equals(Object* obj) {
+            if (dynamic_cast<Playlist*>(obj)) {
+                if (!strcmp(this->nombre.data(), dynamic_cast<Playlist*>(obj)->getNombre().data())) {
+                    for (int i = 0; i < canciones.size(); i++)
+                        if (!canciones[i]->equals(((Playlist*)obj)->getCanciones()[i]))
+                            return false;
+                    return true;
+                }
+            }
+            return false;
+        }
+        string toString() {
+            return nombre;
         }
 };

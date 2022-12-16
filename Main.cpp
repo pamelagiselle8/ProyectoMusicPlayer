@@ -11,15 +11,18 @@ using namespace std;
 #include "SongInfoFile.cpp"
 #include "TDAArchivo.cpp"
 
+GeneroFile* generoFile = new GeneroFile("./Generos.txt");
+PlaylistFile* playlistFile = new PlaylistFile("./Playlists.txt");
+SongInfoFile* songInfoFile = new SongInfoFile("./SongInfos.txt");
 vector<Genero> generos;
 vector<SongInfo> canciones;
 vector<Playlist> playlists;
 
-template <typename T> void listar(vector<T> lista) {
+template <typename T> void listar(vector<T*> lista) {
     cout << endl;
     if(!lista.empty())
-        for (T obj : lista)
-            cout << "\n- " << obj.toString() << endl;
+        for (T* obj : lista)
+            cout << "- " << obj->toString() << endl;
     else
         cout << "Aun no hay elementos registrados.\n";
 }
@@ -38,12 +41,14 @@ void menuGeneros() {
             string nom = "";
             cout << "\nIngrese el nombre del genero: ";
             cin >> nom;
-            generos.push_back(Genero(nom));
-            cout << "\nGenero agregado exitosamente.\n";
+            if (generoFile->agregarGenero(new Genero(nom)))
+                cout << "\nGenero agregado exitosamente.\n";
+            else
+                cout << "\nEl genero ya existe.\n";
             break;
         }
         else if (op == "2") {
-            listar(generos);
+            listar(generoFile->getGeneros());
             break;
         }
         else if (op == "3") { break; }
@@ -71,13 +76,15 @@ void menuCanciones() {
             cin >> artista;
             cout << "Ingrese la ruta de la cancion: ";
             cin >> ruta;
-            canciones.push_back(SongInfo(nom, disco, artista, ruta));
-            cout << "\nCancion agregada exitosamente.\n";
+            if (songInfoFile->agregarCancion(new SongInfo(nom, disco, artista, ruta)))
+                cout << "\nCancion agregada exitosamente.\n";
+            else
+                cout << "\nYa existe una cancion la ruta ingresada.\n";
             break;
         }
         else if (op == "2") {
             // Listar canciones
-            listar(canciones);
+            listar(songInfoFile->getCanciones());
             break;
         }
         else if (op == "3") { break; }
@@ -96,7 +103,13 @@ void menuPlaylist() {
         cin >> op;
         if (op == "1") {
             // Crear playlist
-            
+            string nom = "";
+            cout << "\nIngrese el nombre de la playlist: ";
+            cin >> nom;
+            if (playlistFile->agregarPlaylist(new Playlist(nom)))
+                cout << "\nPlaylist agregada exitosamente.\n";
+            else
+                cout << "\nYa existe una playlist con ese nombre.\n";
             break;
         }
         else if (op == "2") {
@@ -198,7 +211,7 @@ int main() {
         }
         else if (opMenu == "3") {
             // Playlist
-            
+            menuPlaylist();
         }
         else if (opMenu == "4") {
             // Reproducir

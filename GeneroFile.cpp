@@ -33,7 +33,7 @@ class GeneroFile : public TDAArchivo {
 
         // Metodos de administracion
         bool agregarGenero(Genero* genero) {
-            // Agrega un genero cuidando no duplicar
+            // Agrega un genero validando que no se repita
             for (int i = 0; i < generos.size(); i++)
                 if (generos[i]->equals(genero))
                     return false;
@@ -53,7 +53,6 @@ class GeneroFile : public TDAArchivo {
         }
 
         // bool modificarGenero(Genero* genero); // Modificar un genero
-
 
         virtual bool Leer() {
             if (file.is_open()) {
