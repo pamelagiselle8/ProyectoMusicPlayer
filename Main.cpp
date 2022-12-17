@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+// #include <windows.h>
 using namespace std;
 
 #include "Object.cpp"
@@ -159,34 +160,42 @@ void menuPlaylist() {
 
                 // Validar que hayan playlists registradas
                 if (!playlistFile->getPlaylists().empty()) {
-                    string nom = "";
-                    cout << "\nIngrese el nombre de la playlist: ";
-                    cin >> nom;
-                    Playlist* playlist = playlistFile->buscarPlaylist(nom);
-
-                    // Validar que la playlist existe
-                    if (playlist) {
-                        cout << "\nCanciones disponibles:\n";
-                        listar(songInfoFile->getCanciones());
-                        int indice = 0;
-                        cout << "\nIngrese el indice de la cancion que desea agregar: ";
+                    cout << "\nPlaylists registradas:\n";
+                    listar(playlistFile->getPlaylists());
+                    int indice = 0;
+                    while (true) {
+                        cout << "\nIngrese el indice de la playlist: ";
                         cin >> indice;
                         indice--;
 
-                        // Validar indice de la cancion
-                        if (indice >= 0 && indice < songInfoFile->getCanciones().size())
-                            // Validar que la cancion no se repita
-                            if (playlist->agregarCancion(songInfoFile->getCanciones().at(indice))) {
-                                // Guardar datos en el archivo
-                                playlistFile->Abrir();
-                                if (playlistFile->Escribir())
-                                    cout << "\nCancion agregada exitosamente.\n";
-                                playlistFile->Cerrar();
-                            }
-                            else { cout << "\nLa cancion ya existe en la playlist.\n"; }
+                        // Validar indice de la playlist
+                        if (indice >= 0 && indice < playlistFile->getPlaylists().size()) {
+                            int indiceCancion = 0;
+                            Playlist* playlist = playlistFile->getPlaylists().at(indice);
+                            cout << "\nCanciones disponibles:\n";
+                            listar(songInfoFile->getCanciones());
+                            int indice = 0;
+                            cout << "\nIngrese el indice de la cancion que desea agregar: ";
+                            cin >> indice;
+                            indice--;
+
+                            // Validar indice de la cancion
+                            if (indice >= 0 && indice < songInfoFile->getCanciones().size())
+                                // Validar que la cancion no se repita
+                                if (playlist->agregarCancion(songInfoFile->getCanciones().at(indice))) {
+                                    
+                                    // Guardar datos en el archivo
+                                    playlistFile->Abrir();
+                                    if (playlistFile->Escribir())
+                                        cout << "\nCancion agregada exitosamente.\n";
+                                    playlistFile->Cerrar();
+                                    break;
+                                }
+                                else { cout << "\nLa cancion ya existe en la playlist.\n"; }
+                            else { cout << "\nIndice invalido.\n"; }
+                        }
                         else { cout << "\nIndice invalido.\n"; }
                     }
-                    else { cout << "\nNo existe una playlist con el nombre ingresado.\n"; }
                 }
                 else { cout << "\nAun no hay playlists registradas.\n"; }
             }
@@ -209,25 +218,35 @@ void reproducirCancion() {
             cin >> indice;
             indice--;
             // Validar indice de la cancion
-            if (indice >= 0 && indice < songInfoFile->getCanciones().size())
-                break;
-            else { cout << "\nIndice invalido.\n"; }
-        }
-
-        string op = "";
-        while (op != "2") {
-            cout << "\n1. Pausar"
-                << "\n2. Salir"
-                << "\nIngrese una opcion: ";
-            cin >> op;
-            if (op == "1") {
-                // Pausar cancion
+            if (indice >= 0 && indice < songInfoFile->getCanciones().size()) {
+                SongInfo* cancion =  songInfoFile->getCanciones().at(indice);
                 
+                // Abrir el archivo 
+                // mciSendString("open \"" + cancion->getRuta() + "\" type mpegvideo alias mp3", NULL, 0, NULL);
+
+                string op = "";
+                while (op != "2") {
+                    cout << "\n1. Pausar"
+                        << "\n2. Salir"
+                        << "\nIngrese una opcion: ";
+                    cin >> op;
+                    if (op == "1") {
+                        // Pausar cancion
+                        // mciSendString("pause mp3", NULL, 0, NULL);
+                        cout << "\nCancion pausada\n";
+                        // break;
+                    }
+                    else if (op == "2") {
+                        // Salir
+                        // mciSendString("close mp3", NULL, 0, NULL);
+                        break;
+                    }
+                    else { cout << "\nIngrese una opcion valida\n"; }
+                }
                 break;
             }
-            else if (op == "2") { break; }
-            else { cout << "\nIngrese una opcion valida\n"; }
-        }
+            else { cout << "\nIndice invalido.\n"; }
+        }       
     }
     else { cout << "\nAun no hay canciones registradas.\n"; }
     
@@ -243,32 +262,55 @@ void reproducirPlaylist() {
             cout << "\nIngrese el indice de la playlist: ";
             cin >> indice;
             indice--;
-            // Validar indice de la cancion
-            if (indice >= 0 && indice < playlistFile->getPlaylists().size())
+            // Validar indice de la playlist
+            if (indice >= 0 && indice < playlistFile->getPlaylists().size()) {
+                int indiceCancion = 0;
+                Playlist* playlist = playlistFile->getPlaylists().at(indice);
+                SongInfo* cancion =  playlist->getCanciones().at(indiceCancion);
+                
+                // Abrir el archivo 
+                // mciSendString("open \"" + cancion->getRuta() + "\" type mpegvideo alias mp3", NULL, 0, NULL);
+                
+                string op = "";
+                while (op != "3") {
+                    cout << "\n1. Siguiente"
+                        << "\n2. Pausar"
+                        << "\n3. Salir"
+                        << "\nIngrese una opcion: ";
+                    cin >> op;
+                    if (op == "1") {
+                        // Siguiente cancion
+                        if (indiceCancion+1 < playlist->getCanciones().size()) {
+                            cancion =  playlist->getCanciones().at(++indiceCancion);
+                            // mciSendString("open \"" + cancion->getRuta() + "\" type mpegvideo alias mp3", NULL, 0, NULL);
+                            // mciSendString("play mp3", NULL, 0, NULL);
+                            cout << "\nReproduciendo...\n";
+                        }
+                        else {
+                            cout << "\nFin de la playlist.\n";
+                            // op = "3"; (salir) o indiceCancion = 0; (reiniciar playlist)
+                            break;
+                        }
+                    }
+                    else if (op == "2") {
+                        // Pausar cancion
+                        // mciSendString("pause mp3", NULL, 0, NULL);
+                        cout << "\nCancion pausada\n";
+                    }
+                    else if (op == "3") {
+                        // Salir
+                        // mciSendString("close mp3", NULL, 0, NULL);
+                        break;
+                    }
+                    else { cout << "\nIngrese una opcion valida\n"; }
+                }
+
                 break;
+            }
             else { cout << "\nIndice invalido.\n"; }
         }
 
-        string op = "";
-        while (op != "3") {
-            cout << "\n1. Siguiente"
-                << "\n2. Pausar"
-                << "\n3. Salir"
-                << "\nIngrese una opcion: ";
-            cin >> op;
-            if (op == "1") {
-                // Siguiente cancion
-                
-                break;
-            }
-            else if (op == "2") {
-                // Pausar cancion
-                
-                break;
-            }
-            else if (op == "3") { break; }
-            else { cout << "\nIngrese una opcion valida\n"; }
-        }
+        
     }
     else { cout << "\nAun no hay playlists registradas.\n"; }
 }
