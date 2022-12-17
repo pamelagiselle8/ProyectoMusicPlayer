@@ -34,9 +34,9 @@ class PlaylistFile : public TDAArchivo {
             return nullptr;
         }
         virtual bool Leer() {
-            return true;
+            
         }
         virtual bool Escribir() {
-            return true;
+            
         }
 };

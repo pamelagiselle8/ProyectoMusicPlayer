@@ -140,8 +140,13 @@ void menuPlaylist() {
             cin >> nom;
 
             // Validar que la no exista otra playlist con el mismo nombre
-            if (playlistFile->agregarPlaylist(new Playlist(nom)))
-                cout << "\nPlaylist agregada exitosamente.\n";
+            if (playlistFile->agregarPlaylist(new Playlist(nom))) {
+                // Guardar datos en el archivo
+                playlistFile->Abrir();
+                if (playlistFile->Escribir())
+                    cout << "\nPlaylist agregada exitosamente.\n";
+                playlistFile->Cerrar();
+            }
             else
                 cout << "\nYa existe una playlist con ese nombre.\n";
             break;
@@ -171,8 +176,13 @@ void menuPlaylist() {
                         // Validar indice de la cancion
                         if (indice >= 0 && indice < songInfoFile->getCanciones().size())
                             // Validar que la cancion no se repita
-                            if (playlist->agregarCancion(songInfoFile->getCanciones().at(indice)))
-                                cout << "\nCancion agregada exitosamente.\n";
+                            if (playlist->agregarCancion(songInfoFile->getCanciones().at(indice))) {
+                                // Guardar datos en el archivo
+                                playlistFile->Abrir();
+                                if (playlistFile->Escribir())
+                                    cout << "\nCancion agregada exitosamente.\n";
+                                playlistFile->Cerrar();
+                            }
                             else { cout << "\nLa cancion ya existe en la playlist.\n"; }
                         else { cout << "\nIndice invalido.\n"; }
                     }
