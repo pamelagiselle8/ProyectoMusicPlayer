@@ -9,6 +9,7 @@ class PlaylistFile : public TDAArchivo {
     private:
         // Atributos
         vector<Playlist*> playlists;
+        int sizeNombre = 40, sizeCodigo = 4;
     public:
         // Constructores
         PlaylistFile() {}
@@ -28,9 +29,49 @@ class PlaylistFile : public TDAArchivo {
             return true;
         }
         virtual bool Leer() {
-            
+            if (file.is_open()) {
+                string buffer = "";
+                // Leer en bloques
+                getline(file, buffer);
+                for (int i = 0; i < buffer.length(); i += sizeNombre+sizeCodigo) {
+                    string  nombre = buffer.substr(i, sizeNombre),
+                            codigo = buffer.substr(i+sizeNombre, sizeCodigo);
+                    cout << "\nNombre: " << nombre
+                        << "\nCodigo: ->" << codigo << "<-";
+
+                    // agregarPlaylist(new Playlist(nombre, stoi(codigo)));
+                }
+            }
+            return file.is_open();
+        }
+
+        // Metodo para rellenar el espacio no utilizado
+        string truncarDato(string dato, int capacidad) {
+            string datoTruncado = dato.substr(0, capacidad);
+            datoTruncado.append(capacidad - datoTruncado.size(), ' ');
+            return datoTruncado;
         }
         virtual bool Escribir() {
-            
+            if (file.is_open()) {
+                string buffer = "";
+                // Construir buffer
+                for (int i = 0; i < playlists.size(); i++) {
+                    // Recuperar los campos del registro
+                    Playlist* playlist = dynamic_cast<Playlist*>(playlists[i]);
+                    if (playlist) {
+                        // Guardar nombre de la playlist
+                        buffer.append(truncarDato(playlist->getNombre(), sizeNombre));
+
+                        // Guardar codigo de la playlist
+                        string datoTruncado = "", codigo = to_string(playlist->getCodigo());
+                        datoTruncado.append(4 - codigo.size(), '0');
+                        datoTruncado.append(codigo);
+                        buffer.append(datoTruncado);
+                    }
+                }
+                // Escribir en el archivo
+                file.write(buffer.data(), buffer.size());
+            }
+            return file.is_open();
         }
 };

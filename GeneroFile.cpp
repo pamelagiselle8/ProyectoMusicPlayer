@@ -61,7 +61,7 @@ class GeneroFile : public TDAArchivo {
                 getline(file, buffer);
                 for (int i = 0; i < buffer.length(); i += sizeNombre)
                     agregarGenero(new Genero(buffer.substr(i, sizeNombre)));
-                // trim_right(buffer);
+                // trim_right(buffer.substr(i, sizeNombre));
             }
             return file.is_open();
         }

@@ -7,11 +7,13 @@ class Playlist : public Object {
 	protected:
         // Atributos
 		string nombre;
+        int codigo;
         vector<SongInfo*> canciones;
     public:
         // Constructores y destructor
 		Playlist() {}
         Playlist(string nombre) : nombre(nombre) {}
+        Playlist(string nombre, int codigo) : nombre(nombre), codigo(codigo) {}
         ~Playlist() {
             for (int i = 0; i < canciones.size(); i++) {
                 delete canciones[i];
@@ -22,6 +24,8 @@ class Playlist : public Object {
         // Getters y setters
 		string getNombre() { return nombre; }
 		void setNombre(string nombre) { this->nombre = nombre; }
+        int getCodigo() { return codigo; }
+        void setCodigo(int codigo) { this->codigo = codigo; }
 		vector<SongInfo*> getCanciones() { return canciones; }
 		void setCanciones(vector<SongInfo*> canciones) {
             this->canciones = canciones;

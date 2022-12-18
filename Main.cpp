@@ -76,12 +76,13 @@ void menuCanciones() {
             // Validar que hayan generos registrados
             if (!generoFile->getGeneros().empty()) {
                 string nom = "", album = "", artista = "", genero = "", ruta = "";
+                getline(cin, nom);
                 cout << "\nIngrese el nombre de la cancion: ";
-                cin >> nom;
+                getline(cin, nom);
                 cout << "Ingrese el album: ";
-                cin >> album;
+                getline(cin, album);
                 cout << "Ingrese el artista: ";
-                cin >> artista;
+                getline(cin, artista);
 
                 cout << "\nGeneros registrados:\n";
                 listar(generoFile->getGeneros());
@@ -101,8 +102,10 @@ void menuCanciones() {
                 cout << "Ingrese la ruta de la cancion: ";
                 cin >> ruta;
 
+                int codigo = songInfoFile->getCanciones().size();
+
                 // Validar que no existan dos canciones con la misma ruta
-                if (songInfoFile->agregarCancion(new SongInfo(nom, album, artista, genero, ruta))) {
+                if (songInfoFile->agregarCancion(new SongInfo(nom, album, artista, genero, ruta, codigo))) {
                     // Guardar datos en el archivo
                     songInfoFile->Abrir();
                     if (songInfoFile->Escribir())
@@ -137,11 +140,14 @@ void menuPlaylist() {
         if (op == "1") {
             // Crear playlist
             string nom = "";
+            getline(cin, nom);
             cout << "\nIngrese el nombre de la playlist: ";
-            cin >> nom;
+            getline(cin, nom);
+
+            int codigo = playlistFile->getPlaylists().size();
 
             // Validar que la no exista otra playlist con el mismo nombre
-            if (playlistFile->agregarPlaylist(new Playlist(nom))) {
+            if (playlistFile->agregarPlaylist(new Playlist(nom, codigo))) {
                 // Guardar datos en el archivo
                 playlistFile->Abrir();
                 if (playlistFile->Escribir())
@@ -191,7 +197,10 @@ void menuPlaylist() {
                                     playlistFile->Cerrar();
                                     break;
                                 }
-                                else { cout << "\nLa cancion ya existe en la playlist.\n"; }
+                                else {
+                                    cout << "\nLa cancion ya existe en la playlist.\n";
+                                    break;
+                                }
                             else { cout << "\nIndice invalido.\n"; }
                         }
                         else { cout << "\nIndice invalido.\n"; }
@@ -351,15 +360,20 @@ string menuPrincipal() {
     return opMenu;
 }
 
+void cargarDatos(TDAArchivo* archivo) {
+    archivo->Abrir();
+    archivo->Leer();
+    archivo->Cerrar();
+}
+
 int main() {
     string opMenu = menuPrincipal();
-    // Leer los datos de los txt
-    generoFile->Abrir();
-    generoFile->Leer();
-    generoFile->Cerrar();
-    songInfoFile->Abrir();
-    songInfoFile->Leer();
-    songInfoFile->Cerrar();
+    // Cargar generos
+    cargarDatos(generoFile);
+    // Cargar canciones
+    cargarDatos(songInfoFile);
+    // Cargar playlists
+    cargarDatos(playlistFile);
     while (opMenu != "5") {
         if (opMenu == "1") {
             // Generos

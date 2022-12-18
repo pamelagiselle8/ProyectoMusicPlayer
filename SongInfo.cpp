@@ -7,11 +7,16 @@ class SongInfo : public Object {
 	protected:
 		// Atributos
 		string nombre, album, artista, genero, ruta;
+		int codigo;
     public:
 		// Constructores
 		SongInfo() {}
 		SongInfo(string nombre, string album, string artista, string genero, string ruta)
                 : nombre(nombre), album(album), artista(artista), genero(genero), ruta(ruta) {}
+		SongInfo(string nombre, string album, string artista,
+				string genero, string ruta, int codigo)
+                	: nombre(nombre), album(album), artista(artista),
+					genero(genero), ruta(ruta), codigo(codigo) {}
 		
 		// Metodos de administracion
 		virtual bool equals(Object* obj) {
@@ -40,5 +45,6 @@ class SongInfo : public Object {
 		void setArtista(string artista) { this->artista = artista; }
 		void setGenero(string genero) { this->genero = genero; }
 		void setRuta(string ruta) { this->ruta = ruta; }
-	
+		int getCodigo() { return codigo; }
+        void setCodigo(int codigo) { this->codigo = codigo; }
 };
