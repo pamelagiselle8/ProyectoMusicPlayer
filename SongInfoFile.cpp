@@ -46,7 +46,7 @@ class SongInfoFile : public TDAArchivo {
                         buffer.substr(i+(sizeDato*2), sizeDato),                    // Album
                         buffer.substr(i+(sizeDato*3), sizeDato),                    // Genero
                         buffer.substr(i+(sizeDato*4), sizeRuta))),                  // Ruta
-                        stoi(buffer.substr(i+(sizeDato*4)+sizeRuta, sizeCodigo)); // Codigo
+                        stoi(buffer.substr(i+(sizeDato*4)+sizeRuta, sizeCodigo));   // Codigo
                 }
                 // trim_right(buffer);
             }

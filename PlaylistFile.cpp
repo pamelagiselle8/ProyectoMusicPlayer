@@ -36,10 +36,7 @@ class PlaylistFile : public TDAArchivo {
                 for (int i = 0; i < buffer.length(); i += sizeNombre+sizeCodigo) {
                     string  nombre = buffer.substr(i, sizeNombre),
                             codigo = buffer.substr(i+sizeNombre, sizeCodigo);
-                    cout << "\nNombre: " << nombre
-                        << "\nCodigo: ->" << codigo << "<-";
-
-                    // agregarPlaylist(new Playlist(nombre, stoi(codigo)));
+                    agregarPlaylist(new Playlist(nombre, stoi(codigo)));
                 }
             }
             return file.is_open();

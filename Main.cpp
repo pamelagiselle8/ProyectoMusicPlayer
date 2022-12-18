@@ -10,11 +10,13 @@ using namespace std;
 #include "PlaylistFile.cpp"
 #include "SongInfo.cpp"
 #include "SongInfoFile.cpp"
+#include "SongxPlaylistFile.cpp"
 #include "TDAArchivo.cpp"
 
 GeneroFile* generoFile = new GeneroFile("./Generos.txt");
 PlaylistFile* playlistFile = new PlaylistFile("./Playlists.txt");
 SongInfoFile* songInfoFile = new SongInfoFile("./SongInfos.txt");
+SongxPlaylistFile* songxPlaylistFile = new SongxPlaylistFile("./SongxPlaylist.txt");
 
 // Metodo para listar elementos de vectores
 template <typename T> void listar(vector<T*> lista) {
@@ -103,7 +105,7 @@ void menuCanciones() {
                 cin >> ruta;
 
                 int codigo = songInfoFile->getCanciones().size();
-
+                
                 // Validar que no existan dos canciones con la misma ruta
                 if (songInfoFile->agregarCancion(new SongInfo(nom, album, artista, genero, ruta, codigo))) {
                     // Guardar datos en el archivo
@@ -189,12 +191,13 @@ void menuPlaylist() {
                             if (indice >= 0 && indice < songInfoFile->getCanciones().size())
                                 // Validar que la cancion no se repita
                                 if (playlist->agregarCancion(songInfoFile->getCanciones().at(indice))) {
-                                    
+                                    songxPlaylistFile->setCanciones(songInfoFile->getCanciones());
+                                    songxPlaylistFile->setPlaylists(playlistFile->getPlaylists());
                                     // Guardar datos en el archivo
-                                    playlistFile->Abrir();
-                                    if (playlistFile->Escribir())
+                                    songxPlaylistFile->Abrir();
+                                    if (songxPlaylistFile->Escribir())
                                         cout << "\nCancion agregada exitosamente.\n";
-                                    playlistFile->Cerrar();
+                                    songxPlaylistFile->Cerrar();
                                     break;
                                 }
                                 else {
@@ -293,7 +296,7 @@ void reproducirPlaylist() {
                             cancion =  playlist->getCanciones().at(++indiceCancion);
                             // mciSendString("open \"" + cancion->getRuta() + "\" type mpegvideo alias mp3", NULL, 0, NULL);
                             // mciSendString("play mp3", NULL, 0, NULL);
-                            cout << "\nReproduciendo...\n";
+                            cout << "\nReproduciendo " << playlist->getCanciones().at(indiceCancion)->getNombre();
                         }
                         else {
                             cout << "\nFin de la playlist.\n";
@@ -374,6 +377,11 @@ int main() {
     cargarDatos(songInfoFile);
     // Cargar playlists
     cargarDatos(playlistFile);
+    // Cargar canciones a playlists
+    songxPlaylistFile->setPlaylists(playlistFile->getPlaylists());
+    songxPlaylistFile->setCanciones(songInfoFile->getCanciones());
+    cargarDatos(songxPlaylistFile);
+    
     while (opMenu != "5") {
         if (opMenu == "1") {
             // Generos
