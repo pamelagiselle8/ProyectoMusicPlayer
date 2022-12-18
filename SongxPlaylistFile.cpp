@@ -56,12 +56,13 @@ class SongxPlaylistFile : public TDAArchivo {
         }
 
         // Metodo para rellenar codigo con ceros
-        string truncarCodigo(int codigoPlaylist, int capacidad) {
-            string codigoTruncado = "", codigo = to_string(codigoPlaylist);
-            codigoTruncado.append(sizeCodigo - codigo.size(), '0');
-            codigoTruncado.append(codigo);
+        string truncarCodigo(int intCodigo, int capacidad) {
+            string codigoTruncado = "", strCodigo = to_string(intCodigo);
+            codigoTruncado.append(sizeCodigo - strCodigo.size(), '0');
+            codigoTruncado.append(strCodigo);
             return codigoTruncado;
         }
+
         virtual bool Escribir() {
             if (file.is_open()) {
                 // Construir buffer

@@ -191,9 +191,6 @@ void menuPlaylist() {
                             if (indiceCancion >= 0 && indiceCancion < songInfoFile->getCanciones().size()) {
                                 SongInfo* cancion = songInfoFile->getCanciones()[indiceCancion];
 
-                                cout << songInfoFile->getCanciones()[indiceCancion]->getNombre() << endl;
-                                cout << songInfoFile->getCanciones()[indiceCancion]->getCodigo();
-
                                 // Validar que la cancion no se repita
                                 if (playlist->agregarCancion(cancion)) {
                                     songxPlaylistFile->setCanciones(songInfoFile->getCanciones());
@@ -378,7 +375,6 @@ void cargarDatos(TDAArchivo* archivo) {
 }
 
 int main() {
-    string opMenu = menuPrincipal();
     // Cargar generos
     cargarDatos(generoFile);
     // Cargar canciones
@@ -391,6 +387,7 @@ int main() {
     cargarDatos(songxPlaylistFile);
     playlistFile->setPlaylists(songxPlaylistFile->getPlaylists());
     
+    string opMenu = menuPrincipal();
     while (opMenu != "5") {
         if (opMenu == "1") {
             // Generos

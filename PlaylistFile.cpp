@@ -14,6 +14,12 @@ class PlaylistFile : public TDAArchivo {
         // Constructores
         PlaylistFile() {}
         PlaylistFile(string fileName) : TDAArchivo(fileName) {}
+        ~PlaylistFile() {
+            for (int i = 0; i < playlists.size(); i++) {
+                delete playlists[i];
+            }
+            playlists.clear();
+        }
 
         // Getters y setters
         vector<Playlist*> getPlaylists() { return playlists; }
@@ -61,7 +67,7 @@ class PlaylistFile : public TDAArchivo {
 
                         // Guardar codigo de la playlist
                         string datoTruncado = "", codigo = to_string(i); //playlist->getCodigo()
-                        datoTruncado.append(4 - codigo.size(), '0');
+                        datoTruncado.append(sizeCodigo - codigo.size(), '0');
                         datoTruncado.append(codigo);
                         buffer.append(datoTruncado);
                     }
