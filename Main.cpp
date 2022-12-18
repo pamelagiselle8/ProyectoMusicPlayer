@@ -386,25 +386,21 @@ int main() {
     songxPlaylistFile->setCanciones(songInfoFile->getCanciones());
     cargarDatos(songxPlaylistFile);
     playlistFile->setPlaylists(songxPlaylistFile->getPlaylists());
-    
+
     string opMenu = menuPrincipal();
     while (opMenu != "5") {
-        if (opMenu == "1") {
+        if (opMenu == "1")
             // Generos
             menuGeneros();
-        }
-        else if (opMenu == "2") {
+        else if (opMenu == "2")
             // Canciones
             menuCanciones();
-        }
-        else if (opMenu == "3") {
+        else if (opMenu == "3")
             // Playlist
             menuPlaylist();
-        }
-        else if (opMenu == "4") {
+        else if (opMenu == "4")
             // Reproducir
             menuReproduccion();
-        }
         else if (opMenu == "5") { break; }
         else { cout << "\nIngrese una opcion valida.\n"; }
         opMenu = menuPrincipal();
