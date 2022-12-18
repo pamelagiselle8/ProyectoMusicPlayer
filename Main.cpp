@@ -162,7 +162,7 @@ void menuPlaylist() {
         }
         else if (op == "2") {
             // Agregar cancion
-
+            
             // Validar que hayan canciones registradas
             if (!songInfoFile->getCanciones().empty()) {
 
@@ -170,29 +170,35 @@ void menuPlaylist() {
                 if (!playlistFile->getPlaylists().empty()) {
                     cout << "\nPlaylists registradas:\n";
                     listar(playlistFile->getPlaylists());
-                    int indice = 0;
+                    int indicePlaylist = 0;
                     while (true) {
                         cout << "\nIngrese el indice de la playlist: ";
-                        cin >> indice;
-                        indice--;
+                        cin >> indicePlaylist;
+                        indicePlaylist--;
 
                         // Validar indice de la playlist
-                        if (indice >= 0 && indice < playlistFile->getPlaylists().size()) {
-                            int indiceCancion = 0;
-                            Playlist* playlist = playlistFile->getPlaylists().at(indice);
+                        if (indicePlaylist >= 0 && indicePlaylist < playlistFile->getPlaylists().size()) {
+                            Playlist* playlist = playlistFile->getPlaylists()[indicePlaylist];
                             cout << "\nCanciones disponibles:\n";
                             listar(songInfoFile->getCanciones());
-                            int indice = 0;
+                            
+                            int indiceCancion = 0;
                             cout << "\nIngrese el indice de la cancion que desea agregar: ";
-                            cin >> indice;
-                            indice--;
+                            cin >> indiceCancion;
+                            indiceCancion--;
 
                             // Validar indice de la cancion
-                            if (indice >= 0 && indice < songInfoFile->getCanciones().size())
+                            if (indiceCancion >= 0 && indiceCancion < songInfoFile->getCanciones().size()) {
+                                SongInfo* cancion = songInfoFile->getCanciones()[indiceCancion];
+
+                                cout << songInfoFile->getCanciones()[indiceCancion]->getNombre() << endl;
+                                cout << songInfoFile->getCanciones()[indiceCancion]->getCodigo();
+
                                 // Validar que la cancion no se repita
-                                if (playlist->agregarCancion(songInfoFile->getCanciones().at(indice))) {
+                                if (playlist->agregarCancion(cancion)) {
                                     songxPlaylistFile->setCanciones(songInfoFile->getCanciones());
                                     songxPlaylistFile->setPlaylists(playlistFile->getPlaylists());
+
                                     // Guardar datos en el archivo
                                     songxPlaylistFile->Abrir();
                                     if (songxPlaylistFile->Escribir())
@@ -204,6 +210,8 @@ void menuPlaylist() {
                                     cout << "\nLa cancion ya existe en la playlist.\n";
                                     break;
                                 }
+
+                            }
                             else { cout << "\nIndice invalido.\n"; }
                         }
                         else { cout << "\nIndice invalido.\n"; }
@@ -381,6 +389,7 @@ int main() {
     songxPlaylistFile->setPlaylists(playlistFile->getPlaylists());
     songxPlaylistFile->setCanciones(songInfoFile->getCanciones());
     cargarDatos(songxPlaylistFile);
+    playlistFile->setPlaylists(songxPlaylistFile->getPlaylists());
     
     while (opMenu != "5") {
         if (opMenu == "1") {

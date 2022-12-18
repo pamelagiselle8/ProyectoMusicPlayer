@@ -19,7 +19,7 @@ class SongxPlaylistFile : public TDAArchivo {
 
         // Getters y setters
         vector<Playlist*> getPlaylists() { return playlists; }
-        void setPlaylists(vector<Playlist*> playlist) { this->playlists = playlist; }
+        void setPlaylists(vector<Playlist*> playlists) { this->playlists = playlists; }
         vector<SongInfo*> getCanciones() { return canciones; }
         void setCanciones(vector<SongInfo*> canciones) { this->canciones = canciones; }
 
@@ -64,20 +64,23 @@ class SongxPlaylistFile : public TDAArchivo {
         }
         virtual bool Escribir() {
             if (file.is_open()) {
-                string buffer = "";
                 // Construir buffer
+                string buffer = "";
+                
+                // Recuperar los campos del registro
                 for (int i = 0; i < playlists.size(); i++) {
-                    // Recuperar los campos del registro
-                    
-                    Playlist* playlist = dynamic_cast<Playlist*>(playlists[i]);
-                    if (playlist)
-                        // Guardar codigo de la playlist
-                        buffer.append(truncarCodigo(playlist->getCodigo(), sizeCodigo));
-
-                    SongInfo* cancion = dynamic_cast<SongInfo*>(canciones[i]);
-                    if (cancion)
-                        // Guardar codigo de la cancion
-                        buffer.append(truncarCodigo(cancion->getCodigo(), sizeCodigo));
+                    Playlist* playlist = playlists[i];
+                    if (playlist) {
+                        for (int j = 0; j < playlist->getCanciones().size(); j++) {
+                            // Guardar codigo de la playlist
+                            buffer.append(truncarCodigo(playlist->getCodigo(), sizeCodigo));
+                            
+                            SongInfo* cancion = playlist->getCanciones()[j];
+                            if (cancion)
+                                // Guardar codigo de la cancion
+                                buffer.append(truncarCodigo(cancion->getCodigo(), sizeCodigo));
+                        }
+                    }
                 }
                 // Escribir en el archivo
                 file.write(buffer.data(), buffer.size());

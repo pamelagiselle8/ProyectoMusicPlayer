@@ -60,7 +60,7 @@ class PlaylistFile : public TDAArchivo {
                         buffer.append(truncarDato(playlist->getNombre(), sizeNombre));
 
                         // Guardar codigo de la playlist
-                        string datoTruncado = "", codigo = to_string(playlist->getCodigo());
+                        string datoTruncado = "", codigo = to_string(i); //playlist->getCodigo()
                         datoTruncado.append(4 - codigo.size(), '0');
                         datoTruncado.append(codigo);
                         buffer.append(datoTruncado);

@@ -75,7 +75,7 @@ class SongInfoFile : public TDAArchivo {
                             album = cancion->getDisco(),
                             genero = cancion->getGenero(),
                             ruta = cancion->getRuta(),
-                            codigo = to_string(cancion->getCodigo());
+                            codigo = to_string(i);
 
                         // Rellenar el espacio no utilizado
                         buffer.append(truncarDato(nombre, sizeDato));
